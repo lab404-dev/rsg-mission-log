@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lab404-dev — Outlaw &amp; Heist Log (RDR 1/2 • GTA V/VI)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cinzel:wght@700;900&family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;900&family=Oswald:wght@600;700&family=Rye&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           150% SCALE AT DEFAULT 100% BROWSER ZOOM
+           ========================================================================== */
+        html {
+            font-size: 24px;
+            scroll-behavior: smooth;
+        }
+
+        @media (max-width: 640px) {
+            html {
+                font-size: 19px;
+            }
+        }
+
+        /* ==========================================================================
+           GAME THEMES & AUTHENTIC TYPOGRAPHY
+           ========================================================================== */
+        :root, [data-game="rdr2"] {
+            --accent: #cc1b1b;
+            --accent-hover: #e62222;
+            --accent-soft: rgba(204, 27, 27, 0.22);
+            --bg-main: #090909;
+            --bg-card: #121111;
+            --bg-card-hover: #1c1918;
+            --text-main: #f4efe6;
+            --text-muted: #9e968c;
+            --gold: #c99e56;
+            --title-font: 'Cinzel', serif;
+            --ui-font: 'Oswald', sans-serif;
+            --body-font: 'Inter', sans-serif;
+            --bg-glow: radial-gradient(circle at 50% 0%, rgba(160, 20, 20, 0.28) 0%, #090909 75%);
+        }
+
+        [data-game="rdr1"] {
+            --accent: #d96b1f;
+            --accent-hover: #f07b29;
+            --accent-soft: rgba(217, 107, 31, 0.22);
+            --bg-main: #0c0907;
+            --bg-card: #16110d;
+            --bg-card-hover: #221a14;
+            --text-main: #f5ead8;
+            --text-muted: #a6937c;
+            --gold: #e09f3e;
+            --title-font: 'Rye', serif;
+            --ui-font: 'Oswald', sans-serif;
+            --body-font: 'Inter', sans-serif;
+            --bg-glow: radial-gradient(circle at 50% 0%, rgba(185, 88, 22, 0.3) 0%, #0c0907 75%);
+        }
+
+        [data-game="gta5"] {
+            --accent: #4c9a2a;
+            --accent-hover: #5cb834;
+            --accent-soft: rgba(76, 154, 42, 0.22);
+            --bg-main: #080a09;
+            --bg-card: #111513;
+            --bg-card-hover: #19211d;
+            --text-main: #f2f5f3;
+            --text-muted: #8f9c94;
+            --gold: #68b844;
+            --title-font: 'Anton', sans-serif;
+            --ui-font: 'Oswald', sans-serif;
+            --body-font: 'Inter', sans-serif;
+            --bg-glow: radial-gradient(circle at 50% 0%, rgba(76, 154, 42, 0.26) 0%, #080a09 75%);
+        }
+
+        [data-game="gta6"] {
+            --accent: #ff2a85;
+            --accent-hover: #ff4d99;
+            --accent-soft: rgba(255, 42, 133, 0.24);
+            --bg-main: #0a070f;
+            --bg-card: #140f1d;
+            --bg-card-hover: #1f172e;
+            --text-main: #f8f2ff;
+            --text-muted: #a394b8;
+            --gold: #00e5ff;
+            --title-font: 'Bebas Neue', sans-serif;
+            --ui-font: 'Montserrat', sans-serif;
+            --body-font: 'Inter', sans-serif;
+            --bg-glow: radial-gradient(circle at 50% 0%, rgba(255, 42, 133, 0.28) 0%, rgba(0, 229, 255, 0.08) 45%, #0a070f 80%);
+        }
+
+        body {
+            background-color: var(--bg-main);
+            background-image: var(--bg-glow);
+            color: var(--text-main);
+            font-family: var(--body-font);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        .font-game-title {
+            font-family: var(--title-font);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .font-rsg-ui {
+            font-family: var(--ui-font);
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+
+        /* ==========================================================================
+           ROCKSTAR SOCIAL CLUB UI COMPONENTS
+           ========================================================================== */
+        .rsg-panel {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.78);
+        }
+
+        .game-tab {
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .game-tab:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .game-tab.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 0 14px var(--accent-soft);
+        }
+
+        .rsg-input {
+            background-color: rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: var(--text-main);
+            border-radius: 4px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .rsg-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-soft);
+        }
+
+        .rsg-btn-accent {
+            background-color: var(--accent);
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 4px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .rsg-btn-accent:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .rsg-btn-accent:active {
+            transform: scale(0.98);
+        }
+
+        .rsg-btn-outline {
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-muted);
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .rsg-btn-outline:hover {
+            border-color: rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+        }
+
+        .rsg-btn-outline.active {
+            background-color: var(--accent-soft);
+            border-color: var(--accent);
+            color: #ffffff;
+        }
+
+        .rsg-task-item {
+            background-color: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 3px solid transparent;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .rsg-task-item:hover {
+            background-color: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .rsg-task-item.selected {
+            background-color: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.22);
+            border-left-color: var(--accent);
+        }
+
+        .rsg-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.05rem;
+            height: 1.05rem;
+            border: 2px solid var(--text-muted);
+            border-radius: 3px;
+            background-color: rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+        }
+
+        .rsg-checkbox:checked {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .rsg-checkbox:checked::after {
+            content: '✓';
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+    </style>
+</head>
+<body data-game="rdr2" class="flex flex-col items-center pb-10">
+
+    <!-- TOP LAB404-DEV NAVIGATION BAR -->
+    <nav class="w-full bg-black/95 border-b border-white/15 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-5xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+            <!-- lab404-dev Emblem -->
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-[#fcaf17] text-black rounded flex items-center justify-center font-black text-xs tracking-tighter shadow-md select-none">
+                    404
+                </div>
+                <div>
+                    <div class="font-rsg-ui text-[0.55rem] text-[#fcaf17] tracking-widest leading-none">
+                        LAB404-DEV • FAN COMPANION
+                    </div>
+                    <div class="font-bold text-xs text-white tracking-wide">
+                        MISSION &amp; REQUEST LOG
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Switcher: RDR 2 / RDR 1 / GTA V / GTA VI -->
+            <div class="flex flex-wrap items-center gap-1.5" id="game-selector">
+                <button type="button" data-game-btn="rdr2" onclick="switchGame('rdr2')" class="game-tab active font-rsg-ui text-[0.65rem] px-3 py-1.5 font-bold cursor-pointer">
+                    RDR II
+                </button>
+                <button type="button" data-game-btn="rdr1" onclick="switchGame('rdr1')" class="game-tab font-rsg-ui text-[0.65rem] px-3 py-1.5 font-bold cursor-pointer">
+                    RDR I
+                </button>
+                <button type="button" data-game-btn="gta5" onclick="switchGame('gta5')" class="game-tab font-rsg-ui text-[0.65rem] px-3 py-1.5 font-bold cursor-pointer">
+                    GTA V
+                </button>
+                <button type="button" data-game-btn="gta6" onclick="switchGame('gta6')" class="game-tab font-rsg-ui text-[0.65rem] px-3 py-1.5 font-bold cursor-pointer">
+                    GTA VI
+                </button>
+            </div>
+
+            <!-- Sound Toggle -->
+            <button type="button" onclick="toggleSound()" class="font-rsg-ui text-[0.6rem] text-white/75 hover:text-white border border-white/15 px-2.5 py-1.5 rounded cursor-pointer flex items-center gap-1.5">
+                <span id="sound-icon">🔊</span>
+                <span id="sound-label">SFX: ON</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- LAB404-DEV TOAST NOTIFICATION -->
+    <div id="rsg-toast" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-black/95 text-white border border-white/20 border-l-4 px-4 py-3 rounded shadow-2xl" style="border-left-color: var(--accent);">
+        <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded bg-[#fcaf17] text-black font-black text-[0.55rem] flex items-center justify-center flex-shrink-0">
+                404
+            </div>
+            <div>
+                <p id="rsg-toast-title" class="font-rsg-ui text-[0.6rem] text-[#fcaf17]">SAVED TO PROFILE</p>
+                <p id="rsg-toast-msg" class="text-xs text-white/90">Entry updated.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full max-w-5xl px-3 sm:px-5 mt-5">
+
+        <!-- SELECTED GAME HERO BANNER -->
+        <header class="rsg-panel p-5 mb-5 relative overflow-hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[0.6rem] font-rsg-ui font-bold mb-2" style="background-color: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent);">
+                        <span id="game-badge">RED DEAD REDEMPTION II</span>
+                    </div>
+                    <h1 id="game-heading" class="font-game-title text-2xl sm:text-3xl font-black text-white leading-tight">
+                        ARTHUR MORGAN'S JOURNAL
+                    </h1>
+                    <p id="game-subtitle" class="text-xs text-[var(--text-muted)] mt-1">
+                        Item requests from Uncle, camp errands, and Van der Linde gang leads.
+                    </p>
+                </div>
+
+                <!-- 100% Completion Progress Box -->
+                <div class="bg-black/60 border border-white/15 rounded p-3.5 min-w-[11rem]">
+                    <div class="flex items-center justify-between font-rsg-ui text-[0.6rem] text-[var(--text-muted)] mb-1">
+                        <span>COMPLETION</span>
+                        <span id="progress-counter" class="text-white font-bold">0 / 0</span>
+                    </div>
+                    <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden mb-1.5">
+                        <div id="progress-bar" class="h-full transition-all duration-300" style="width: 0%; background-color: var(--accent);"></div>
+                    </div>
+                    <div class="text-right font-game-title text-base font-bold" style="color: var(--accent);" id="progress-percent">
+                        0%
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- NEW TASK FORM -->
+        <section class="rsg-panel p-4 mb-5">
+            <form id="task-form" class="space-y-3">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <!-- Dynamic Character Dropdown -->
+                    <div>
+                        <label for="task-giver" class="block font-rsg-ui text-[0.6rem] text-[var(--text-muted)] mb-1">
+                            Assigned By
+                        </label>
+                        <select id="task-giver" class="rsg-input w-full px-3 py-2 text-xs font-semibold cursor-pointer">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Objective Title -->
+                    <div class="md:col-span-2">
+                        <label for="task-title" class="block font-rsg-ui text-[0.6rem] text-[var(--text-muted)] mb-1">
+                            Objective / Item to Find
+                        </label>
+                        <input 
+                            type="text" 
+                            id="task-title" 
+                            required
+                            placeholder="Write down the request..." 
+                            class="rsg-input w-full px-3 py-2 text-sm placeholder:text-white/30"
+                        >
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
+                    <div class="flex-1">
+                        <label for="task-note" class="block font-rsg-ui text-[0.6rem] text-[var(--text-muted)] mb-1">
+                            Notes / Map Location (Optional)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="task-note" 
+                            placeholder="Extra details, reward, or territory..." 
+                            class="rsg-input w-full px-3 py-1.5 text-xs placeholder:text-white/30"
+                        >
+                    </div>
+
+                    <button type="submit" class="rsg-btn-accent font-rsg-ui text-xs px-5 py-2 cursor-pointer whitespace-nowrap">
+                        + Log Objective
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- TWO-COLUMN LAYOUT: LIST & DETAILS -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            
+            <!-- LEFT COLUMN: OBJECTIVES LIST -->
+            <div class="lg:col-span-7 rsg-panel p-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
+                    <div class="flex flex-wrap gap-1.5" id="filter-buttons">
+                        <button type="button" data-filter="all" class="rsg-btn-outline active font-rsg-ui text-[0.6rem] px-3 py-1 cursor-pointer">
+                            All
+                        </button>
+                        <button type="button" data-filter="active" class="rsg-btn-outline font-rsg-ui text-[0.6rem] px-3 py-1 cursor-pointer">
+                            Active
+                        </button>
+                        <button type="button" data-filter="completed" class="rsg-btn-outline font-rsg-ui text-[0.6rem] px-3 py-1 cursor-pointer">
+                            Completed
+                        </button>
+                    </div>
+
+                    <button type="button" onclick="clearCompleted()" class="font-rsg-ui text-[0.6rem] hover:underline cursor-pointer" style="color: var(--accent);">
+                        Clear Completed
+                    </button>
+                </div>
+
+                <ul id="task-list" class="space-y-2.5 max-h-[25rem] overflow-y-auto pr-1">
+                    <!-- Rendered via JS -->
+                </ul>
+
+                <div id="empty-state" class="hidden text-center py-10 px-4 border border-dashed border-white/15 rounded">
+                    <p class="font-game-title text-base text-[var(--text-muted)]">No Active Objectives</p>
+                    <p class="text-xs text-white/40 mt-1">
+                        Add a new request for this title — it saves automatically across sessions.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: OBJECTIVE DETAILS CARD -->
+            <aside class="lg:col-span-5 rsg-panel p-5 sticky top-20">
+                <div class="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3">
+                    <span class="font-rsg-ui text-xs font-bold" style="color: var(--accent);">OBJECTIVE BRIEF</span>
+                    <span id="detail-status-badge" class="font-rsg-ui text-[0.55rem] px-2 py-0.5 rounded bg-white/10 text-white">
+                        ACTIVE
+                    </span>
+                </div>
+
+                <div id="task-details-content">
+                    <!-- Selected task details -->
+                </div>
+
+                <!-- Auto-save & Backup for GitHub Pages -->
+                <div class="mt-6 pt-3 border-t border-white/10">
+                    <div class="font-rsg-ui text-[0.55rem] text-[var(--text-muted)] mb-2 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span>AUTO-SAVED IN BROWSER FOR ALL 4 TITLES</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" onclick="exportTasks()" class="rsg-btn-outline font-rsg-ui text-[0.55rem] px-2.5 py-1 cursor-pointer">
+                            Export Backup (.json)
+                        </button>
+                        <label class="rsg-btn-outline font-rsg-ui text-[0.55rem] px-2.5 py-1 cursor-pointer">
+                            Import Backup
+                            <input type="file" id="import-file" accept=".json" class="hidden" onchange="importTasks(event)">
+                        </label>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- LAB404-DEV FOOTER -->
+        <footer class="mt-8 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[0.6rem] text-[var(--text-muted)]">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="font-bold text-white">LAB404-DEV</span>
+                <span>•</span>
+                <span>Unofficial Fan-Made Tracker (Not affiliated with Rockstar Games)</span>
+            </div>
+            <div class="font-rsg-ui text-[0.55rem]">
+                RDR II • RDR I • GTA V • GTA VI
+            </div>
+        </footer>
+    </main>
+
+    <!-- CONFIRMATION MODAL -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+        <div class="rsg-panel max-w-md w-full p-5 border" style="border-color: var(--accent);">
+            <h3 class="font-game-title text-lg text-white mb-2">Clear Completed Tasks?</h3>
+            <p class="text-xs text-[var(--text-muted)] mb-5">
+                All completed objectives in the current game will be permanently removed. Continue?
+            </p>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeConfirmModal()" class="rsg-btn-outline font-rsg-ui text-xs px-4 py-1.5 cursor-pointer">
+                    Cancel
+                </button>
+                <button type="button" onclick="confirmClearCompleted()" class="rsg-btn-accent font-rsg-ui text-xs px-4 py-1.5 cursor-pointer">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           ROCKSTAR GAMES CONFIG: CHARACTERS, COPY & TAILORED AUDIO
+           ========================================================================== */
+
+        const GAME_CONFIG = {
+            rdr2: {
+                badge: 'RED DEAD REDEMPTION II',
+                heading: "ARTHUR MORGAN'S JOURNAL",
+                subtitle: 'Item requests from Uncle, camp errands, and Van der Linde gang leads.',
+                placeholder: 'e.g., Find Kentucky Bourbon and Peppermint for Uncle...',
+                givers: [
+                    '🥃 Uncle (Item Request)',
+                    '🎩 Dutch van der Linde',
+                    '🥩 Mr. Pearson (Camp)',
+                    '🔫 Sadie Adler',
+                    '📜 Hosea Matthews',
+                    '🏹 Charles Smith',
+                    '🐎 Personal Note'
+                ],
+                defaultTask: {
+                    giver: '🥃 Uncle (Item Request)',
+                    title: 'Find Kentucky Bourbon, Peppermint, and Hair Pomade',
+                    note: 'Uncle needs these ingredients for his special lumbago remedy. Check the general store in Valentine.'
+                }
+            },
+            rdr1: {
+                badge: 'RED DEAD REDEMPTION',
+                heading: "JOHN MARSTON'S LOG",
+                subtitle: 'Bounty hunting contracts, New Austin errands, and Mexico leads.',
+                placeholder: 'e.g., Capture the fugitive hiding near Armadillo...',
+                givers: [
+                    '🤠 John Marston (Personal)',
+                    '⭐ Marshal Leigh Johnson',
+                    '🧪 Nigel West Dickens',
+                    '💀 Seth Briars',
+                    '🇲🇽 Abraham Reyes',
+                    '🎯 Bounty Poster'
+                ],
+                defaultTask: {
+                    giver: '⭐ Marshal Leigh Johnson',
+                    title: 'Clear out the Walton Gang hideout at Twin Rocks',
+                    note: 'Stock up on Winchester repeater ammo at the Armadillo gunsmith before riding out.'
+                }
+            },
+            gta5: {
+                badge: 'GRAND THEFT AUTO V',
+                heading: 'LOS SANTOS HEIST BOARD',
+                subtitle: 'Heist setups, Lester leads, and Vinewood street jobs.',
+                placeholder: 'e.g., Steal a getaway vehicle for Lester...',
+                givers: [
+                    '💻 Lester Crest (Lead)',
+                    '🎬 Michael De Santa',
+                    '🐶 Franklin Clinton',
+                    '🔥 Trevor Philips',
+                    '📱 Lamar Davis',
+                    '🏎️ Simeon Yetarian'
+                ],
+                defaultTask: {
+                    giver: '💻 Lester Crest (Lead)',
+                    title: 'Source masks, coveralls, and a discreet getaway car',
+                    note: 'Stash the vehicle in the alleyway just off Vinewood Boulevard.'
+                }
+            },
+            gta6: {
+                badge: 'GRAND THEFT AUTO VI • LEONIDA',
+                heading: 'VICE CITY CASEBOOK',
+                subtitle: 'Lucia & Jason leads across Vice City and the State of Leonida.',
+                placeholder: 'e.g., Scout the back alley on Ocean Drive...',
+                givers: [
+                    '🌴 Lucia (Plan)',
+                    '🧢 Jason (Lead)',
+                    '🦩 Vice City (Contract)',
+                    '🚤 Leonida Keys (Drop)',
+                    '💎 Nightclub Intel'
+                ],
+                defaultTask: {
+                    giver: '🌴 Lucia (Plan)',
+                    title: 'Scout the rear exit near the pawn shop on Ocean Drive',
+                    note: 'Meet Jason back at the motel around sunset.'
+                }
+            }
+        };
+
+        const STORAGE_KEY = 'rockstar_hub_tasks_en_v1';
+        const ACTIVE_GAME_KEY = 'rockstar_hub_active_game';
+        const SOUND_KEY = 'rockstar_hub_sound';
+
+        let currentGame = 'rdr2';
+        let allTasks = { rdr2: [], rdr1: [], gta5: [], gta6: [] };
+        let selectedTaskId = null;
+        let currentFilter = 'all';
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPreferences();
+            loadTasks();
+            applyGameTheme(currentGame, false);
+            setupEvents();
+        });
+
+        function loadPreferences() {
+            const savedSound = localStorage.getItem(SOUND_KEY);
+            if (savedSound !== null) soundEnabled = savedSound === 'true';
+            updateSoundUI();
+
+            const savedGame = localStorage.getItem(ACTIVE_GAME_KEY);
+            if (savedGame && GAME_CONFIG[savedGame]) {
+                currentGame = savedGame;
+            }
+        }
+
+        function loadTasks() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    allTasks = {
+                        rdr2: parsed.rdr2 || [],
+                        rdr1: parsed.rdr1 || [],
+                        gta5: parsed.gta5 || [],
+                        gta6: parsed.gta6 || []
+                    };
+                } else {
+                    Object.keys(GAME_CONFIG).forEach(gameKey => {
+                        if (allTasks[gameKey].length === 0) {
+                            const def = GAME_CONFIG[gameKey].defaultTask;
+                            allTasks[gameKey].push({
+                                id: `${gameKey}_init_${Date.now()}`,
+                                giver: def.giver,
+                                title: def.title,
+                                note: def.note,
+                                completed: false,
+                                createdAt: new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+                            });
+                        }
+                    });
+                    saveTasks();
+                }
+            } catch (e) {
+                console.error('Error reading localStorage:', e);
+            }
+        }
+
+        function saveTasks() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
+            } catch (e) {
+                showToast('SAVE ERROR', 'Unable to write data to browser storage.');
+            }
+        }
+
+        /**
+         * Switch Active Game (RDR 2 / RDR 1 / GTA V / GTA VI)
+         */
+        function switchGame(gameKey) {
+            if (!GAME_CONFIG[gameKey] || currentGame === gameKey) return;
+            currentGame = gameKey;
+            localStorage.setItem(ACTIVE_GAME_KEY, gameKey);
+            applyGameTheme(gameKey, true);
+        }
+
+        function applyGameTheme(gameKey, withSound = true) {
+            document.body.setAttribute('data-game', gameKey);
+
+            document.querySelectorAll('#game-selector button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.gameBtn === gameKey);
+            });
+
+            const cfg = GAME_CONFIG[gameKey];
+            document.getElementById('game-badge').textContent = cfg.badge;
+            document.getElementById('game-heading').textContent = cfg.heading;
+            document.getElementById('game-subtitle').textContent = cfg.subtitle;
+            document.getElementById('task-title').placeholder = cfg.placeholder;
+
+            const selectEl = document.getElementById('task-giver');
+            selectEl.innerHTML = cfg.givers.map(g => `<option value="${escapeHTML(g)}">${escapeHTML(g)}</option>`).join('');
+
+            const currentList = allTasks[gameKey] || [];
+            selectedTaskId = currentList.length > 0 ? currentList[0].id : null;
+
+            if (withSound) {
+                playGameSound('switch');
+            }
+            renderAll();
+        }
+
+        /* ==========================================================================
+           STUDIO-GRADE LAYERED WEB AUDIO ENGINE (NO HARSH BEEPS)
+           ========================================================================== */
+        function playGameSound(action = 'select') {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const now = audioCtx.currentTime;
+
+                // Master soft compressor/gain to keep all SFX warm and pleasant
+                const master = audioCtx.createGain();
+                master.gain.setValueAtTime(0.75, now);
+                master.connect(audioCtx.destination);
+
+                if (currentGame === 'rdr2' || currentGame === 'rdr1') {
+                    if (action === 'write' || action === 'complete') {
+                        // Realistic quill / charcoal scribble on thick journal paper
+                        const duration = action === 'write' ? 0.38 : 0.24;
+                        const bufferSize = Math.floor(audioCtx.sampleRate * duration);
+                        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                        const data = buffer.getChannelData(0);
+
+                        for (let i = 0; i < bufferSize; i++) {
+                            const t = i / audioCtx.sampleRate;
+                            // Rhythmic handwriting strokes
+                            const strokes = Math.pow(Math.abs(Math.sin(t * Math.PI * (action === 'write' ? 11 : 7))), 1.6);
+                            const envelope = Math.sin((t / duration) * Math.PI);
+                            data[i] = (Math.random() * 2 - 1) * strokes * envelope;
+                        }
+
+                        const noise = audioCtx.createBufferSource();
+                        noise.buffer = buffer;
+
+                        const bandpass = audioCtx.createBiquadFilter();
+                        bandpass.type = 'bandpass';
+                        bandpass.frequency.setValueAtTime(currentGame === 'rdr2' ? 2100 : 1750, now);
+                        bandpass.Q.setValueAtTime(1.4, now);
+
+                        const highshelf = audioCtx.createBiquadFilter();
+                        highshelf.type = 'highshelf';
+                        highshelf.frequency.setValueAtTime(4000, now);
+                        highshelf.gain.setValueAtTime(-8, now);
+
+                        const gain = audioCtx.createGain();
+                        gain.gain.setValueAtTime(0.55, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+                        noise.connect(bandpass);
+                        bandpass.connect(highshelf);
+                        highshelf.connect(gain);
+                        gain.connect(master);
+                        noise.start(now);
+                    } else if (action === 'switch') {
+                        // Deep, muffled wooden & leather RDR2 pause menu thud + subtle paper flick
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(115, now);
+                        osc.frequency.exponentialRampToValueAtTime(38, now + 0.09);
+
+                        gain.gain.setValueAtTime(0.38, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+                        osc.connect(gain);
+                        gain.connect(master);
+                        osc.start(now);
+                        osc.stop(now + 0.11);
+
+                        // Subtle crisp paper brush tail
+                        const pBuf = audioCtx.createBuffer(1, Math.floor(audioCtx.sampleRate * 0.07), audioCtx.sampleRate);
+                        const pData = pBuf.getChannelData(0);
+                        for (let i = 0; i < pData.length; i++) pData[i] = (Math.random() * 2 - 1) * (1 - i / pData.length);
+                        const pSrc = audioCtx.createBufferSource();
+                        pSrc.buffer = pBuf;
+                        const pFilter = audioCtx.createBiquadFilter();
+                        pFilter.type = 'bandpass';
+                        pFilter.frequency.value = 1400;
+                        const pGain = audioCtx.createGain();
+                        pGain.gain.setValueAtTime(0.14, now);
+                        pGain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+                        pSrc.connect(pFilter);
+                        pFilter.connect(pGain);
+                        pGain.connect(master);
+                        pSrc.start(now);
+                    } else {
+                        // Soft muted wooden tap for list navigation
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(135, now);
+                        osc.frequency.exponentialRampToValueAtTime(52, now + 0.045);
+                        gain.gain.setValueAtTime(0.22, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                        osc.connect(gain);
+                        gain.connect(master);
+                        osc.start(now);
+                        osc.stop(now + 0.055);
+                    }
+                } else if (currentGame === 'gta5') {
+                    if (action === 'write' || action === 'complete') {
+                        // Warm, glass-like iFruit double chime (C6 -> G6 with soft harmonic tail)
+                        [
+                            { freq: 1046.5, time: 0, dur: 0.22, vol: 0.14 },
+                            { freq: 1567.98, time: 0.085, dur: 0.34, vol: 0.16 }
+                        ].forEach(note => {
+                            const osc = audioCtx.createOscillator();
+                            const sub = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+
+                            osc.type = 'sine';
+                            sub.type = 'triangle';
+                            osc.frequency.setValueAtTime(note.freq, now + note.time);
+                            sub.frequency.setValueAtTime(note.freq * 0.5, now + note.time);
+
+                            gain.gain.setValueAtTime(0.001, now + note.time);
+                            gain.gain.linearRampToValueAtTime(note.vol, now + note.time + 0.012);
+                            gain.gain.exponentialRampToValueAtTime(0.0008, now + note.time + note.dur);
+
+                            osc.connect(gain);
+                            sub.connect(gain);
+                            gain.connect(master);
+
+                            osc.start(now + note.time);
+                            sub.start(now + note.time);
+                            osc.stop(now + note.time + note.dur + 0.02);
+                            sub.stop(now + note.time + note.dur + 0.02);
+                        });
+                    } else if (action === 'switch') {
+                        // Smooth filtered air-whoosh + soft sub-click like GTA V Pause Menu
+                        const osc = audioCtx.createOscillator();
+                        const filter = audioCtx.createBiquadFilter();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(190, now);
+                        osc.frequency.exponentialRampToValueAtTime(320, now + 0.08);
+
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(650, now);
+
+                        gain.gain.setValueAtTime(0.24, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+                        osc.connect(filter);
+                        filter.connect(gain);
+                        gain.connect(master);
+                        osc.start(now);
+                        osc.stop(now + 0.1);
+                    } else {
+                        // Subtle, low-volume tactile click
+                        const osc = audioCtx.createOscillator();
+                        const filter = audioCtx.createBiquadFilter();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(280, now);
+                        osc.frequency.exponentialRampToValueAtTime(160, now + 0.035);
+                        filter.type = 'lowpass';
+                        filter.frequency.value = 700;
+                        gain.gain.setValueAtTime(0.14, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                        osc.connect(filter);
+                        filter.connect(gain);
+                        gain.connect(master);
+                        osc.start(now);
+                        osc.stop(now + 0.045);
+                    }
+                } else if (currentGame === 'gta6') {
+                    // Velvet 80s/Modern Vice City Analog Pad & Sub Bass (warm low-pass, zero harshness)
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(720, now);
+                    filter.Q.setValueAtTime(2.0, now);
+                    filter.connect(master);
+
+                    if (action === 'write' || action === 'complete') {
+                        // Lush Vice City synth chord (Fmaj7 warm swell)
+                        const chord = [174.61, 220.0, 261.63, 329.63];
+                        chord.forEach((freq, i) => {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.type = i === 0 ? 'triangle' : 'sine';
+                            osc.frequency.setValueAtTime(freq, now);
+                            osc.detune.setValueAtTime((i - 1.5) * 6, now);
+
+                            gain.gain.setValueAtTime(0.001, now);
+                            gain.gain.linearRampToValueAtTime(0.09, now + 0.05);
+                            gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.45);
+
+                            osc.connect(gain);
+                            gain.connect(filter);
+                            osc.start(now);
+                            osc.stop(now + 0.47);
+                        });
+                    } else if (action === 'switch') {
+                        // Deep, warm analog sub-bass glide
+                        const osc = audioCtx.createOscillator();
+                        const sub = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'triangle';
+                        sub.type = 'sine';
+                        osc.frequency.setValueAtTime(98, now);
+                        osc.frequency.exponentialRampToValueAtTime(146.83, now + 0.14);
+                        sub.frequency.setValueAtTime(49, now);
+                        sub.frequency.exponentialRampToValueAtTime(73.42, now + 0.14);
+
+                        gain.gain.setValueAtTime(0.001, now);
+                        gain.gain.linearRampToValueAtTime(0.28, now + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+                        osc.connect(gain);
+                        sub.connect(gain);
+                        gain.connect(filter);
+                        osc.start(now);
+                        sub.start(now);
+                        osc.stop(now + 0.2);
+                        sub.stop(now + 0.2);
+                    } else {
+                        // Soft muted synth pluck
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(220, now);
+                        osc.frequency.exponentialRampToValueAtTime(146.83, now + 0.06);
+                        gain.gain.setValueAtTime(0.14, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+                        osc.connect(gain);
+                        gain.connect(filter);
+                        osc.start(now);
+                        osc.stop(now + 0.08);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            localStorage.setItem(SOUND_KEY, soundEnabled);
+            updateSoundUI();
+            if (soundEnabled) playGameSound('switch');
+        }
+
+        function updateSoundUI() {
+            document.getElementById('sound-icon').textContent = soundEnabled ? '🔊' : '🔇';
+            document.getElementById('sound-label').textContent = soundEnabled ? 'SFX: ON' : 'SFX: OFF';
+        }
+
+        function setupEvents() {
+            document.getElementById('task-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                addNewTask();
+            });
+
+            const filterBtns = document.querySelectorAll('#filter-buttons button');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    playGameSound('select');
+                    renderAll();
+                });
+            });
+        }
+
+        function addNewTask() {
+            const giver = document.getElementById('task-giver').value;
+            const titleInput = document.getElementById('task-title');
+            const noteInput = document.getElementById('task-note');
+
+            const title = titleInput.value.trim();
+            if (!title) return;
+
+            const newTask = {
+                id: `${currentGame}_${Date.now()}`,
+                giver: giver,
+                title: title,
+                note: noteInput.value.trim(),
+                completed: false,
+                createdAt: new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+            };
+
+            allTasks[currentGame].unshift(newTask);
+            selectedTaskId = newTask.id;
+            saveTasks();
+            playGameSound('write');
+
+            titleInput.value = '';
+            noteInput.value = '';
+
+            renderAll();
+            showToast('LOGGED TO JOURNAL', `${newTask.giver}: objective saved.`);
+        }
+
+        function selectTask(id) {
+            if (selectedTaskId === id) return;
+            selectedTaskId = id;
+            playGameSound('select');
+            renderAll();
+        }
+
+        function toggleTask(id, event) {
+            if (event) event.stopPropagation();
+            const list = allTasks[currentGame];
+            const task = list.find(t => t.id === id);
+            if (!task) return;
+
+            task.completed = !task.completed;
+            selectedTaskId = id;
+            saveTasks();
+            playGameSound(task.completed ? 'complete' : 'select');
+            renderAll();
+
+            if (task.completed) {
+                showToast('OBJECTIVE COMPLETE', `Marked done: ${task.giver}`);
+            }
+        }
+
+        function deleteTask(id, event) {
+            if (event) event.stopPropagation();
+            allTasks[currentGame] = allTasks[currentGame].filter(t => t.id !== id);
+            const list = allTasks[currentGame];
+            if (selectedTaskId === id) {
+                selectedTaskId = list.length > 0 ? list[0].id : null;
+            }
+            saveTasks();
+            playGameSound('select');
+            renderAll();
+            showToast('REMOVED', 'Entry removed from the log.');
+        }
+
+        function renderAll() {
+            renderStats();
+            renderTaskList();
+            renderTaskDetails();
+        }
+
+        function renderStats() {
+            const list = allTasks[currentGame] || [];
+            const completedCount = list.filter(t => t.completed).length;
+            const total = list.length;
+            const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+
+            document.getElementById('progress-counter').textContent = `${completedCount} / ${total}`;
+            document.getElementById('progress-percent').textContent = `${percent}%`;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        function renderTaskList() {
+            const listEl = document.getElementById('task-list');
+            const emptyEl = document.getElementById('empty-state');
+            const list = allTasks[currentGame] || [];
+
+            const filtered = list.filter(task => {
+                if (currentFilter === 'active') return !task.completed;
+                if (currentFilter === 'completed') return task.completed;
+                return true;
+            });
+
+            listEl.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyEl.classList.remove('hidden');
+                return;
+            } else {
+                emptyEl.classList.add('hidden');
+            }
+
+            filtered.forEach(task => {
+                const isSelected = task.id === selectedTaskId;
+                const li = document.createElement('li');
+                li.onclick = () => selectTask(task.id);
+                li.className = `fade-in rsg-task-item p-3 cursor-pointer flex items-center justify-between gap-3 ${
+                    isSelected ? 'selected' : ''
+                }`;
+
+                li.innerHTML = `
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <input 
+                            type="checkbox" 
+                            class="rsg-checkbox" 
+                            ${task.completed ? 'checked' : ''} 
+                            onclick="toggleTask('${task.id}', event)"
+                            aria-label="Completed"
+                        >
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="font-rsg-ui text-[0.6rem] font-bold" style="color: ${task.completed ? 'var(--text-muted)' : 'var(--accent)'};">
+                                    ${escapeHTML(task.giver)}
+                                </span>
+                                <span class="text-[0.55rem] text-white/40">• ${escapeHTML(task.createdAt || '')}</span>
+                            </div>
+                            <p class="text-sm font-medium truncate ${
+                                task.completed ? 'line-through text-white/45' : 'text-white'
+                            }">
+                                ${escapeHTML(task.title)}
+                            </p>
+                        </div>
+                    </div>
+
+                    <button 
+                        type="button" 
+                        onclick="deleteTask('${task.id}', event)" 
+                        class="text-white/40 hover:text-white p-1 transition-colors cursor-pointer flex-shrink-0"
+                        title="Delete"
+                    >
+                        ✕
+                    </button>
+                `;
+
+                listEl.appendChild(li);
+            });
+        }
+
+        function renderTaskDetails() {
+            const container = document.getElementById('task-details-content');
+            const badge = document.getElementById('detail-status-badge');
+            const list = allTasks[currentGame] || [];
+            const task = list.find(t => t.id === selectedTaskId);
+
+            if (!task) {
+                badge.textContent = 'EMPTY';
+                badge.style.backgroundColor = 'rgba(255,255,255,0.08)';
+                badge.style.color = 'var(--text-muted)';
+                container.innerHTML = `
+                    <p class="text-xs text-[var(--text-muted)] py-4">
+                        Select any objective on the left to inspect its full details.
+                    </p>
+                `;
+                return;
+            }
+
+            if (task.completed) {
+                badge.textContent = 'COMPLETED';
+                badge.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                badge.style.color = '#34d399';
+            } else {
+                badge.textContent = 'ACTIVE';
+                badge.style.backgroundColor = 'var(--accent-soft)';
+                badge.style.color = 'var(--accent)';
+            }
+
+            container.innerHTML = `
+                <div class="fade-in space-y-3">
+                    <div>
+                        <span class="font-rsg-ui text-[0.55rem] text-[var(--text-muted)] block">ASSIGNED BY</span>
+                        <span class="font-bold text-sm" style="color: var(--gold);">
+                            ${escapeHTML(task.giver)}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span class="font-rsg-ui text-[0.55rem] text-[var(--text-muted)] block mb-0.5">OBJECTIVE</span>
+                        <p class="text-base text-white font-semibold leading-snug ${task.completed ? 'line-through opacity-60' : ''}">
+                            ${escapeHTML(task.title)}
+                        </p>
+                    </div>
+
+                    <div class="bg-black/50 border-l-2 p-3 rounded-r" style="border-color: var(--accent);">
+                        <span class="font-rsg-ui text-[0.55rem] text-[var(--text-muted)] block mb-1">FIELD NOTES &amp; LOCATION</span>
+                        <p class="text-xs text-white/80 leading-relaxed">
+                            ${task.note ? escapeHTML(task.note) : 'No additional field notes.'}
+                        </p>
+                    </div>
+
+                    <div class="pt-2">
+                        <button 
+                            type="button" 
+                            onclick="toggleTask('${task.id}')" 
+                            class="rsg-btn-accent font-rsg-ui text-xs px-4 py-2 cursor-pointer w-full"
+                        >
+                            ${task.completed ? 'Reopen Objective' : 'Mark as Completed'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function clearCompleted() {
+            const list = allTasks[currentGame] || [];
+            if (!list.some(t => t.completed)) {
+                showToast('NOTHING TO CLEAR', 'No completed objectives in this title yet.');
+                return;
+            }
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmClearCompleted() {
+            allTasks[currentGame] = allTasks[currentGame].filter(t => !t.completed);
+            const list = allTasks[currentGame];
+            if (!list.some(t => t.id === selectedTaskId)) {
+                selectedTaskId = list.length > 0 ? list[0].id : null;
+            }
+            saveTasks();
+            playGameSound('complete');
+            renderAll();
+            closeConfirmModal();
+            showToast('CLEARED', 'Completed objectives have been removed.');
+        }
+
+        function exportTasks() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allTasks, null, 2));
+            const a = document.createElement('a');
+            a.setAttribute("href", dataStr);
+            a.setAttribute("download", `rockstar_tracker_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showToast('BACKUP EXPORTED', 'Saved progress across all 4 titles.');
+        }
+
+        function importTasks(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && typeof imported === 'object' && !Array.isArray(imported)) {
+                        allTasks = {
+                            rdr2: imported.rdr2 || [],
+                            rdr1: imported.rdr1 || [],
+                            gta5: imported.gta5 || [],
+                            gta6: imported.gta6 || []
+                        };
+                        saveTasks();
+                        applyGameTheme(currentGame, false);
+                        showToast('BACKUP RESTORED', 'All 4 titles imported successfully.');
+                    } else if (Array.isArray(imported)) {
+                        allTasks[currentGame] = imported;
+                        saveTasks();
+                        applyGameTheme(currentGame, false);
+                        showToast('IMPORTED', 'Objectives loaded into current title.');
+                    }
+                } catch (err) {
+                    showToast('IMPORT ERROR', 'Invalid JSON backup file.');
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        let toastTimeout;
+        function showToast(title, message) {
+            const toast = document.getElementById('rsg-toast');
+            document.getElementById('rsg-toast-title').textContent = title;
+            document.getElementById('rsg-toast-msg').textContent = message;
+
+            toast.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
